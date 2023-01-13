@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import MoviesList from "./components/MoviesList";
 import "./App.css";
@@ -14,12 +14,12 @@ function App() {
     setIsLoading(false);
   };
 
-  const fetchMoviesHandler = async () => {
+  const fetchMoviesHandler = useCallback( async () => {
     setIsLoading(true);
     setError(null);
     try {
       console.log('inside try')
-      const response = await fetch("https://swapi.dev/api/film/");
+      const response = await fetch("https://swapi.dev/api/films/");
       if (!response.ok) {
         throw new Error("Something went wrong... Retrying");
       }
@@ -37,18 +37,22 @@ function App() {
       setIsLoading(false);
     } catch (err) {
       setError(err.message);
-      setTimeout(() => {
-        let intervalId = setInterval(async () => {
-          const response = fetch("https://swapi.dev/api/film/");
-          if(response.ok) {
-            clearInterval(intervalId);
-            setError(null);
-          }
-        }, 5000)
-      }, 5000);
+      // setTimeout(() => {
+      //   let intervalId = setInterval(async () => {
+      //     const response = fetch("https://swapi.dev/api/film/");
+      //     if(response.ok) {
+      //       clearInterval(intervalId);
+      //       setError(null);
+      //     }
+      //   }, 5000)
+      // }, 5000);
     }
     setIsLoading(false);
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchMoviesHandler();
+  }, [fetchMoviesHandler]);
 
   return (
     <React.Fragment>
