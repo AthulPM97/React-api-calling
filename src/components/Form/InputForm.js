@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./InputForm.css";
 
-const InputForm = () => {
+const InputForm = (props) => {
   const [userInput, setUserInput] = useState({
     enteredTitle: "",
     enteredOpeningText: "",
@@ -33,13 +33,14 @@ const InputForm = () => {
     });
   };
 
-  const addMovieHandler = () => {
+  const submitHandler = (event) => {
+    event.preventDefault();
     const newMovieObj = {
       title: userInput.enteredTitle,
       openingText: userInput.enteredOpeningText,
       releaseDate: userInput.enteredReleaseDate,
     };
-    console.log(newMovieObj);
+    props.onAdd(newMovieObj);
     setUserInput({
       enteredTitle: "",
       enteredOpeningText: "",
@@ -48,14 +49,14 @@ const InputForm = () => {
   };
 
   return (
-    <form>
+    <form onSubmit={submitHandler}>
       <label>Title</label>
       <input type="text" onChange={titleChangeHandler} value={userInput.enteredTitle}/>
       <label>Opening text</label>
       <input type="text" onChange={openTextChangeHandler} value={userInput.enteredOpeningText}/>
       <label>Release date</label>
       <input type="text" onChange={releaseDateChangeHandler} value={userInput.enteredReleaseDate}/>
-      <button type="button" onClick={addMovieHandler}>
+      <button type="submit">
         Add Movie
       </button>
     </form>
